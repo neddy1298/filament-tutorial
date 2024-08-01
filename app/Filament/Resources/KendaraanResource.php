@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -102,15 +103,15 @@ class KendaraanResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('unit_kerja')
-                ->options(UnitKerja::all()->pluck('nama_unit_kerja', 'id'))
-                ->query(function (Builder $query, array $data): Builder {
-                    if (empty($data['values'])) {
-                        return $query;
-                    }
-                    return $query->whereIn('unit_kerja_id', $data['values']);
-                })
-                ->multiple()
-                ->searchable(),
+                    ->options(UnitKerja::all()->pluck('nama_unit_kerja', 'id'))
+                    ->query(function (Builder $query, array $data): Builder {
+                        if (empty($data['values'])) {
+                            return $query;
+                        }
+                        return $query->whereIn('unit_kerja_id', $data['values']);
+                    })
+                    ->multiple()
+                    ->searchable(),
                 SelectFilter::make('berlaku_sampai')
                     ->options([
                         'kadaluarsa' => 'Kadaluarsa',
@@ -134,9 +135,10 @@ class KendaraanResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                
+                ExportBulkAction::make(),
             ]);
-        }
-
+    }
     public static function getRelations(): array
     {
         return [
