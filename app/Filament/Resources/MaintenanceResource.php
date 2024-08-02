@@ -38,11 +38,11 @@ class MaintenanceResource extends Resource
                     ->options(Kendaraan::all()->pluck('nomor_registrasi', 'id'))
                     ->native(false)
                     ->searchable(),
-                Forms\Components\TextInput::make('belanja_bahan_bakar_minyak')
+                Forms\Components\TextInput::make('belanja.belanja_bahan_bakar_minyak')
                     ->numeric(),
-                Forms\Components\TextInput::make('belanja_pelumas_mesin')
+                Forms\Components\TextInput::make('belanja.belanja_pelumas_mesin')
                     ->numeric(),
-                Forms\Components\TextInput::make('belanja_suku_cadang')
+                Forms\Components\TextInput::make('belanja.belanja_suku_cadang')
                     ->numeric(),
                 Forms\Components\Textarea::make('keterangan')
                     ->autosize(),
@@ -55,14 +55,25 @@ class MaintenanceResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('kendaraan.nomor_registrasi')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('belanja_bahan_bakar_minyak')
+                Tables\Columns\TextColumn::make('belanja.belanja_bahan_bakar_minyak')
+                    ->prefix('Rp ')
                     ->numeric()
+                    ->label('Total Belanja BBM')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('belanja_pelumas_mesin')
+                Tables\Columns\TextColumn::make('belanja.belanja_pelumas_mesin')
+                    ->prefix('Rp ')
                     ->numeric()
+                    ->label('Total Belanja Pelumas')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('belanja_suku_cadang')
+                Tables\Columns\TextColumn::make('belanja.belanja_suku_cadang')
+                    ->prefix('Rp ')
                     ->numeric()
+                    ->label('Total Belanja Suku Cadang')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('belanja.total_belanja')
+                    ->prefix('Rp ')
+                    ->numeric()
+                    ->label('Total Belanja')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

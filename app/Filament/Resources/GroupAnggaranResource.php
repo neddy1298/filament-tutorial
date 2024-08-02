@@ -55,6 +55,8 @@ class GroupAnggaranResource extends Resource
                     ->numeric(),
                 Forms\Components\TextInput::make('anggaran_suku_cadang')
                     ->numeric(),
+                Forms\Components\TextInput::make('anggaran_suku_cadang')
+                    ->numeric(),
             ]);
     }
 
@@ -72,12 +74,19 @@ class GroupAnggaranResource extends Resource
                 Tables\Columns\TextColumn::make('anggaran_bahan_bakar_minyak')
                     ->prefix('Rp ')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('anggaran_pelumas_mesin')
                     ->prefix('Rp ')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('anggaran_suku_cadang')
+                    ->prefix('Rp ')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('anggaran_total')
                     ->prefix('Rp ')
                     ->numeric()
                     ->sortable(),

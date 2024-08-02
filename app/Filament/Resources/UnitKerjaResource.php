@@ -43,15 +43,6 @@ class UnitKerjaResource extends Resource
                     ->searchable(),
                 Forms\Components\TextInput::make('nama_unit_kerja')
                     ->required(),
-                Forms\Components\TextInput::make('budget_bahan_bakar_minyak')
-                    ->prefix('Rp ')
-                    ->numeric(),
-                Forms\Components\TextInput::make('budget_pelumas_mesin')
-                    ->prefix('Rp ')
-                    ->numeric(),
-                Forms\Components\TextInput::make('budget_suku_cadang')
-                    ->prefix('Rp ')
-                    ->numeric(),
             ]);
     }
 
@@ -69,17 +60,25 @@ class UnitKerjaResource extends Resource
                     ->searchable()
                     ->label('Kode Rekening Group')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('budget_bahan_bakar_minyak')
+                Tables\Columns\TextColumn::make('groupAnggaran.anggaran_bahan_bakar_minyak')
                     ->prefix('Rp ')
                     ->numeric()
+                    ->label('Anggaran BBM')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('budget_pelumas_mesin')
+                Tables\Columns\TextColumn::make('groupAnggaran.anggaran_pelumas_mesin')
                     ->prefix('Rp ')
                     ->numeric()
+                    ->label('Anggaran Pelumas')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('budget_suku_cadang')
+                Tables\Columns\TextColumn::make('groupAnggaran.anggaran_suku_cadang')
                     ->prefix('Rp ')
                     ->numeric()
+                    ->label('Anggaran Suku Cadang')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('groupAnggaran.anggaran_total')
+                    ->prefix('Rp ')
+                    ->numeric()
+                    ->label('Anggaran Total')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -94,7 +93,7 @@ class UnitKerjaResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -116,8 +115,8 @@ class UnitKerjaResource extends Resource
         return [
             'index' => Pages\ListUnitKerjas::route('/'),
             // 'create' => Pages\CreateUnitKerja::route('/create'),
-            'view' => Pages\ViewUnitKerja::route('/{record}'),
-            'edit' => Pages\EditUnitKerja::route('/{record}/edit'),
+            // 'view' => Pages\ViewUnitKerja::route('/{record}'),
+            // 'edit' => Pages\EditUnitKerja::route('/{record}/edit'),
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Kendaraan;
 use App\Models\UnitKerja;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -17,6 +18,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class KendaraanResource extends Resource
 {
@@ -38,33 +40,52 @@ class KendaraanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nomor_registrasi')
-                    ->required()
-                    ->autocapitalize('words')
-                    ->unique(ignoreRecord: true),
-                Forms\Components\Select::make('unit_kerja_id')
-                    ->options(UnitKerja::all()->pluck('nama_unit_kerja', 'id'))
-                    ->native(false)
-                    ->searchable(),
-                Forms\Components\TextInput::make('merk_kendaraan')
-                    ->required(),
-                Forms\Components\TextInput::make('jenis_kendaraan')
-                    ->required(),
-                Forms\Components\TextInput::make('cc_kendaraan')
-                    ->required()
-                    ->suffix(' CC')
-                    ->numeric(),
-                Forms\Components\Select::make('bbm_kendaraan')
-                    ->required()
-                    ->options([
-                        'bensin' => 'Bensin',
-                        'solar' => 'Solar',
+                Forms\Components\Section::make('Informasi Kendaraan')
+                    ->schema([
+                        Forms\Components\TextInput::make('nomor_registrasi')
+                            ->required()
+                            ->autocapitalize('words')
+                            ->unique(ignoreRecord: true),
+                        Forms\Components\Select::make('unit_kerja_id')
+                            ->options(UnitKerja::all()->pluck('nama_unit_kerja', 'id'))
+                            ->native(false)
+                            ->searchable(),
+                        Forms\Components\TextInput::make('merk_kendaraan')
+                            ->required(),
+                        Forms\Components\TextInput::make('jenis_kendaraan')
+                            ->required(),
+                        Forms\Components\TextInput::make('cc_kendaraan')
+                            ->required()
+                            ->suffix(' CC')
+                            ->numeric(),
+                        Forms\Components\Select::make('bbm_kendaraan')
+                            ->required()
+                            ->options([
+                                'bensin' => 'Bensin',
+                                'solar' => 'Solar',
+                            ])
+                            ->native(false),
+                        Forms\Components\TextInput::make('roda_kendaraan')
+                            ->required(),
+                        Forms\Components\DatePicker::make('berlaku_sampai')
+                            ->required(),
                     ])
-                    ->native(false),
-                Forms\Components\TextInput::make('roda_kendaraan')
-                    ->required(),
-                Forms\Components\DatePicker::make('berlaku_sampai')
-                    ->required(),
+                    ->columns(2),
+
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Section::make('berlaku_sampai')
+                            ->schema([
+                                Select::make('berlaku_sampai')->label('berlaku_sampai')
+                                    ->hiddenLabel()
+                                    ->multiple()
+                                    ->preload()
+                                    ->maxItems(1)
+                                    ->native(false),
+                            ])
+                            ->compact(),
+                    ])
+                    ->columnSpan(1),
             ]);
     }
 
@@ -102,6 +123,7 @@ class KendaraanResource extends Resource
                     ->sortable(),
             ])
             ->filters([
+
                 SelectFilter::make('unit_kerja')
                     ->options(UnitKerja::all()->pluck('nama_unit_kerja', 'id'))
                     ->query(function (Builder $query, array $data): Builder {
@@ -125,7 +147,7 @@ class KendaraanResource extends Resource
                             return $query->whereDate('berlaku_sampai', '>=', now());
                         }
                         return $query;
-                    })
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -135,7 +157,6 @@ class KendaraanResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-                
                 ExportBulkAction::make(),
             ]);
     }
